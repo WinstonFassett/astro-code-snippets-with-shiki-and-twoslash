@@ -1,0 +1,22 @@
+---
+import { renderCodeToHTML, runTwoSlash, createShikiHighlighter } from "shiki-twoslash"
+import './shiki-twoslash.css'
+
+export let html = ``
+const highlighter = await createShikiHighlighter({ theme: "dark-plus" })
+const { lang, code, ...props } = Astro.props;
+const twoslash = runTwoSlash(
+  `
+  type Thing = { name: string };
+  const thing: Thing = { name: 'thing'}
+  const o = { thing }  
+  function someFunction(options: typeof o) {
+    return o.thing.name
+  }
+`
+  , "ts", {})
+const html = renderCodeToHTML(twoslash.code, "tsx", { twoslash: true }, {}, highlighter, twoslash)
+
+---
+
+<div set:html={html} />
